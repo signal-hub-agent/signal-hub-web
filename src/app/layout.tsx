@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { Providers } from "./providers"; 
+import { Providers } from "./providers";
+import { Navbar } from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Signal-Hub",
-  description: "AI-driven Web3 On-chain Data & Intent Analysis Platform",
+  title: "Signal Hub | Mantle Ecosystem",
+  description: "Web3 On-chain Data & AI Signal Advisor",
 };
 
 export default function RootLayout({
@@ -16,10 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={`${inter.className} bg-gray-50/50 min-h-screen`}>
         <Providers>
-          {children}
+          <Navbar />
+          {/* 主体内容区 */}
+          <main className="py-6">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>
