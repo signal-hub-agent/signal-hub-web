@@ -14,7 +14,6 @@ export function Navbar() {
     { name: "Home", path: "/" },
     { name: "Signal", path: "/signal" },
     { name: "Detective", path: "/detective" },
-    { name: "Zero-Day", path: "/zero-day" },
     { name: "Alerts", path: "/alerts" },
   ];
 

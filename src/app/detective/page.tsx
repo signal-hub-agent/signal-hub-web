@@ -3,6 +3,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useTop100Traders } from "@/hooks/useTop100Traders";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+// 1. 👇 引入刚才新写的弹窗组件 👇
+import { SubscribeModal } from "@/components/SubscribeModal";
+
 // 格式化地址为 0x1234...5678
 const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
@@ -30,9 +34,15 @@ const getTagColor = (tag: string) => {
 };
 
 export default function DetectiveListPage() {
+  const { data: session } = useSession();
   const { data, isLoading, error } = useTop100Traders();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // 2. 👇 必须把 Modal 的状态放在组件函数内部 👇
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [subscribingAddress, setSubscribingAddress] = useState("");
+  
   const ITEMS_PER_PAGE = 10;
 
   // 模糊搜索过滤逻辑
@@ -50,6 +60,17 @@ export default function DetectiveListPage() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  // 3. 👇 重写订阅逻辑：不再直接 fetch，而是弹窗 👇
+  const triggerSubscribe = (addressToSubscribe: string) => {
+    if (!session?.user?.email) {
+      alert("请先通过右上角登录您的 Google 账号！");
+      return;
+    }
+    // 记录当前点击的地址，并打开弹窗
+    setSubscribingAddress(addressToSubscribe);
+    setIsModalOpen(true);
+  };
 
   if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>正在雷达扫描 Top 100 聪明钱地址...</span></div>;
   if (error) return <div className="p-8 text-red-500">数据加载失败: {error}</div>;
@@ -114,7 +135,7 @@ export default function DetectiveListPage() {
                     </div>
                   </div>
 
-                  {/* Copy Score 现在安全地待在自己的 Flex 容器里 */}
+                  {/* Copy Score */}
                   <div className="flex flex-col items-center justify-center">
                      <span className="text-2xl font-black text-gray-900">{trader.composite_score}</span>
                      <span className="text-xs font-medium text-gray-500 uppercase">Score</span>
@@ -126,7 +147,7 @@ export default function DetectiveListPage() {
                   <Button 
                     variant="default" 
                     className="bg-gray-900 hover:bg-gray-800 text-white rounded-full px-5 shadow-sm transition-transform hover:scale-105"
-                    onClick={() => alert(`Subscribed to address ${formatAddress(trader.address)}!`)}
+                    onClick={() => triggerSubscribe(trader.address)} // 4. 👇 改用新的触发函数 👇
                   >
                     <BellRing className="w-4 h-4 mr-2" />
                     Subscribe
@@ -167,6 +188,14 @@ export default function DetectiveListPage() {
           </Pagination>
         </div>
       )}
+
+      {/* 5. 👇 在组件最外层挂载弹窗 👇 */}
+      <SubscribeModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        targetAddress={subscribingAddress}
+        onSuccess={() => alert("✅ 告警规则配置成功！请前往 Alerts 页面查看实时监控情况。")}
+      />
 
     </div>
   );

@@ -124,6 +124,7 @@ export default function TokenSignalPage() {
                 >
                   {/* 🌟 巧妙的容器设计：将手风琴触发器与独立的订阅按钮并排放置，避免 DOM 嵌套报错 */}
                   <div className="flex items-center justify-between pr-5 bg-white hover:bg-gray-50/50 transition-colors">
+                    {/* 把 flex-1 留给 Trigger */}
                     <AccordionTrigger className="flex-1 hover:no-underline py-5 pl-5 pr-4 border-none [&>svg]:ml-4">
                       <div className="flex items-center space-x-6">
                         <div className="flex items-center space-x-3 w-24">
@@ -143,20 +144,6 @@ export default function TokenSignalPage() {
                         )}
                       </div>
                     </AccordionTrigger>
-                    
-                    {/* 独立的订阅按钮 */}
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-100 shadow-none z-10 transition-transform hover:scale-105"
-                      onClick={() => {
-                        // 未来可以在这里调用你的后端 /api/v1/subscribe 接口
-                        alert(`Subscribed to ${signal.token_symbol} real-time alerts!`);
-                      }}
-                    >
-                      <BellRing className="w-4 h-4 mr-1.5" />
-                      Subscribe
-                    </Button>
                   </div>
                   
                   {/* 下方折叠的分析面板 (与之前保持完全一致) */}
