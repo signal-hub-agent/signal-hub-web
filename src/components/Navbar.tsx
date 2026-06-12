@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Activity } from "lucide-react";
+import { Activity, LogOut, User } from "lucide-react";
+import { useSession, signIn, signOut } from "next-auth/react"; // 引入 NextAuth
 
 export function Navbar() {
   const pathname = usePathname();
+  const { data: session, status } = useSession(); // 获取登录状态
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -50,14 +52,42 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* 右侧登录区 (自带头像、地址、余额、断开连接下拉菜单) */}
-          <div className="flex items-center">
+          {/* 右侧登录区 (合并了 Google 登录和钱包连接) */}
+          <div className="flex items-center gap-3">
+            {/* 钱包连接按钮 */}
             <ConnectButton 
               accountStatus={{
                 smallScreen: 'avatar',
                 largeScreen: 'full',
               }} 
             />
+
+            {/* Google 登录状态管理 */}
+            {status === "loading" ? (
+              <div className="w-8 h-8 bg-gray-100 animate-pulse rounded-full" />
+            ) : session ? (
+              <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
+                <img 
+                  src={session.user?.image || ""} 
+                  alt="User" 
+                  className="w-8 h-8 rounded-full border border-gray-200" 
+                />
+                <button 
+                  onClick={() => signOut()}
+                  className="text-gray-500 hover:text-gray-900"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => signIn("google")}
+                className="ml-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </div>

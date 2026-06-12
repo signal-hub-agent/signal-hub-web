@@ -1,32 +1,35 @@
 "use client";
 
 import * as React from "react";
-import {
-  getDefaultConfig,
-  RainbowKitProvider,
-  lightTheme,
-} from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { mantle, mainnet } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+// 🌟 1. 引入 SessionProvider
+import { SessionProvider } from "next-auth/react"; 
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import "@rainbow-me/rainbowkit/styles.css";
 
 const config = getDefaultConfig({
   appName: "Signal Hub",
-  projectId: "7808052059e8aafdffae2219a83c5804", // 生产环境需要去 WalletConnect 申请，本地测试可随便填或留默认
+  projectId: "7808052059e8aafdffae2219a83c5804",
   chains: [mantle, mainnet],
-  ssr: true, // 开启 Next.js 的服务端渲染支持
+  ssr: true,
 });
 
+const queryClient = new QueryClient();
+
+// 🌟 2. 接收 session 参数
 export function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider locale="en-US">
-          {children}
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <SessionProvider>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider locale="en-US">
+            {children}
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </SessionProvider>
   );
 }
