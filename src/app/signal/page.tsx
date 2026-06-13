@@ -69,8 +69,8 @@ export default function TokenSignalPage() {
     currentPage * ITEMS_PER_PAGE
   );
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>正在同步全网 Token 信号池...</span></div>;
-  if (error) return <div className="p-8 text-red-500">数据加载失败: {error}</div>;
+  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>Synchronizing global token signal pool...</span></div>;
+  if (error) return <div className="p-8 text-red-500">Failed to load data: {error}</div>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">

@@ -61,7 +61,7 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
   };
 
   const handleSave = async () => {
-    if (!session?.user?.email) return alert("请先登录");
+    if (!session?.user?.email) return alert("Please sign in first");
     setIsSaving(true);
     try {
       const res = await fetch("http://localhost:8000/api/v1/alerts/subscribe", {
@@ -79,11 +79,11 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
         onSuccess();
         onClose();
       } else {
-        alert("保存失败");
+        alert("Failed to save");
       }
     } catch (e) {
       console.error(e);
-      alert("网络错误");
+      alert("Network error");
     } finally {
       setIsSaving(false);
     }
@@ -106,13 +106,13 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
         <div className="p-6 space-y-8">
           {/* 告警名称 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Alert Name (告警名称)</label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="例如: 巨鲸追踪-01" />
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Alert Name</label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="For example: Whale Tracking-01" />
           </div>
 
           {/* 策略选择区 */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-4">Signal Triggers (触发条件设置)</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-4">Signal Triggers</label>
             <div className="space-y-4">
               
               {/* 1. Whale Movements */}
@@ -121,15 +121,15 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-blue-100 text-blue-600 rounded-lg"><Waves className="w-5 h-5" /></div>
                     <div>
-                      <h3 className="font-bold text-gray-900">Whale Movements (大额资金转移)</h3>
-                      <p className="text-sm text-gray-500">监控该地址单笔转出/转入的大额资产异动。</p>
+                      <h3 className="font-bold text-gray-900">Whale Movements</h3>
+                      <p className="text-sm text-gray-500">Monitor large single-transaction asset transfers (in/out) for this address.</p>
                     </div>
                   </div>
                   <input type="checkbox" className="w-5 h-5 accent-indigo-600" checked={config.whale_movement.enabled} onChange={() => handleToggle('whale_movement')} />
                 </div>
                 {config.whale_movement.enabled && (
                   <div className="mt-4 pt-4 border-t border-indigo-100 flex items-center space-x-4">
-                    <span className="text-sm font-medium text-gray-700">触发阈值 (USD) &gt; </span>
+                    <span className="text-sm font-medium text-gray-700">Trigger Threshold (USD) &gt; </span>
                     <Input type="number" className="w-32 bg-white" value={config.whale_movement.threshold_usd} onChange={(e) => handleNumberChange('whale_movement', 'threshold_usd', e.target.value)} />
                   </div>
                 )}
@@ -141,8 +141,8 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-green-100 text-green-600 rounded-lg"><Activity className="w-5 h-5" /></div>
                     <div>
-                      <h3 className="font-bold text-gray-900">Smart Money Swaps (DEX 异常交易)</h3>
-                      <p className="text-sm text-gray-500">该地址买入了全新的、低流动性的 Alpha Token 时触发。</p>
+                      <h3 className="font-bold text-gray-900">Smart Money Swaps</h3>
+                      <p className="text-sm text-gray-500">Triggered when this address purchases a new, low-liquidity Alpha Token.</p>
                     </div>
                   </div>
                   <input type="checkbox" className="w-5 h-5 accent-indigo-600" checked={config.smart_swap.enabled} onChange={() => handleToggle('smart_swap')} />
@@ -155,15 +155,15 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-red-100 text-red-600 rounded-lg"><ShieldAlert className="w-5 h-5" /></div>
                     <div>
-                      <h3 className="font-bold text-gray-900">Zero-Day Interactions (零日合约交互)</h3>
-                      <p className="text-sm text-gray-500">地址向刚部署不久的未知合约发送 Approve 或进行交互。</p>
+                      <h3 className="font-bold text-gray-900">Zero-Day Interactions</h3>
+                      <p className="text-sm text-gray-500">Triggered when the address interacts with or approves a recently deployed unknown contract.</p>
                     </div>
                   </div>
                   <input type="checkbox" className="w-5 h-5 accent-indigo-600" checked={config.zero_day.enabled} onChange={() => handleToggle('zero_day')} />
                 </div>
                 {config.zero_day.enabled && (
                   <div className="mt-4 pt-4 border-t border-indigo-100 flex items-center space-x-4">
-                    <span className="text-sm font-medium text-gray-700">限制合约部署时长 (小时) &lt; </span>
+                    <span className="text-sm font-medium text-gray-700">Max Contract Age (Hours) &lt; </span>
                     <Input type="number" className="w-24 bg-white" value={config.zero_day.max_contract_age_hours} onChange={(e) => handleNumberChange('zero_day', 'max_contract_age_hours', e.target.value)} />
                   </div>
                 )}
@@ -175,8 +175,8 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-cyan-100 text-cyan-600 rounded-lg"><Droplets className="w-5 h-5" /></div>
                     <div>
-                      <h3 className="font-bold text-gray-900">Liquidity Provisioning (流动性骤变)</h3>
-                      <p className="text-sm text-gray-500">监控从核心 DEX 交易对中突然撤出巨额 LP 的跑路前兆行为。</p>
+                      <h3 className="font-bold text-gray-900">Liquidity Provisioning</h3>
+                      <p className="text-sm text-gray-500">Monitor sudden massive LP withdrawals from core DEX pairs (potential rug-pull precursor).</p>
                     </div>
                   </div>
                   <input type="checkbox" className="w-5 h-5 accent-indigo-600" checked={config.liquidity.enabled} onChange={() => handleToggle('liquidity')} />
@@ -189,15 +189,15 @@ export function SubscribeModal({ isOpen, onClose, targetAddress, existingData, o
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-orange-100 text-orange-600 rounded-lg"><ArrowRightLeft className="w-5 h-5" /></div>
                     <div>
-                      <h3 className="font-bold text-gray-900">Bridge Transfers (跨链桥行为)</h3>
-                      <p className="text-sm text-gray-500">资金通过 Mantle Bridge 逃离生态跨回 L1 的信号。</p>
+                      <h3 className="font-bold text-gray-900">Bridge Transfers</h3>
+                      <p className="text-sm text-gray-500">Monitor funds bridging out of the ecosystem back to L1 via Mantle Bridge.</p>
                     </div>
                   </div>
                   <input type="checkbox" className="w-5 h-5 accent-indigo-600" checked={config.bridge.enabled} onChange={() => handleToggle('bridge')} />
                 </div>
                 {config.bridge.enabled && (
                   <div className="mt-4 pt-4 border-t border-indigo-100 flex items-center space-x-4">
-                    <span className="text-sm font-medium text-gray-700">触发阈值 (USD) &gt; </span>
+                    <span className="text-sm font-medium text-gray-700">Trigger Threshold (USD) &gt; </span>
                     <Input type="number" className="w-32 bg-white" value={config.bridge.threshold_usd} onChange={(e) => handleNumberChange('bridge', 'threshold_usd', e.target.value)} />
                   </div>
                 )}

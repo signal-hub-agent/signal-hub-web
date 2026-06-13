@@ -22,7 +22,7 @@ const queryClient = new QueryClient();
 // 🌟 2. 接收 session 参数
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider>
+    <SessionProvider refetchOnWindowFocus={false}>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider locale="en-US">

@@ -37,8 +37,8 @@ export default function AddressDetectivePage({ params }: { params: Promise<{ add
   // 🌟 使用路由里的真实地址，删掉原先 hardcode 的 testAddress
   const { data, isLoading, error } = useAddressDetective(address);
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>正在深度侦测链上地址...</span></div>;
-  if (error || !data) return <div className="p-8 text-red-500">侦测失败: {error}</div>;
+  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>Deep scanning on-chain address...</span></div>;
+  if (error || !data) return <div className="p-8 text-red-500">Scan failed: {error}</div>;
 
   // 🌟 核心修复：解构嵌套了两次的 LLM 包装层
   const metrics = data.metrics;
@@ -149,7 +149,7 @@ export default function AddressDetectivePage({ params }: { params: Promise<{ add
               {/* 🌟 修复双负号 Bug */}
               <div className="text-2xl font-bold text-red-600">{metrics?.max_drawdown.toFixed(1)}%</div>
             </div>
-            <div className="bg-gray-50 p-4 rounded-xl">
+           <div className="bg-gray-50 p-4 rounded-xl">
               <div className="text-gray-500 text-sm mb-1">Volume</div>
               <div className="text-2xl font-bold text-gray-900">${((metrics?.total_volume_usd || 0)/1000000).toFixed(1)}M</div>
             </div>

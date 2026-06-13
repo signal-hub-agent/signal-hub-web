@@ -64,7 +64,7 @@ export default function DetectiveListPage() {
   // 3. 👇 重写订阅逻辑：不再直接 fetch，而是弹窗 👇
   const triggerSubscribe = (addressToSubscribe: string) => {
     if (!session?.user?.email) {
-      alert("请先通过右上角登录您的 Google 账号！");
+      alert("Please log in with your Google account via the top right corner first!");
       return;
     }
     // 记录当前点击的地址，并打开弹窗
@@ -72,8 +72,8 @@ export default function DetectiveListPage() {
     setIsModalOpen(true);
   };
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>正在雷达扫描 Top 100 聪明钱地址...</span></div>;
-  if (error) return <div className="p-8 text-red-500">数据加载失败: {error}</div>;
+  if (isLoading) return <div className="p-8 text-center text-gray-500 flex items-center justify-center space-x-2"><Activity className="animate-spin w-5 h-5"/> <span>Radar scanning Top 100 Smart Money addresses...</span></div>;
+  if (error) return <div className="p-8 text-red-500">Failed to load data: {error}</div>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -194,7 +194,7 @@ export default function DetectiveListPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         targetAddress={subscribingAddress}
-        onSuccess={() => alert("✅ 告警规则配置成功！请前往 Alerts 页面查看实时监控情况。")}
+        onSuccess={() => alert("✅ Alert rules configured successfully! Please proceed to the Alerts page to check the real-time monitoring.")}
       />
 
     </div>
