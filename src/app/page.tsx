@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="min-h-screen bg-slate-50/30">
+      <main className="container mx-auto px-4 py-8 max-w-[1400px]">
         
         {/* 页面标题区 */}
         <div className="mb-8">
@@ -23,25 +23,22 @@ export default function DashboardPage() {
           <KpiCards />
         </div>
 
-        {/* 核心布局：一核双翼 */}
-        {/* 桌面端：左侧雷达 (3列) + 中间流 (5列) + 右侧侦探 (4列) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
+        {/* 核心布局：等宽三等分，完美对齐 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 左翼：AI Token Radar */}
-          <div className="lg:col-span-3">
+          <div className="w-full">
             <TokenRadar />
           </div>
 
-          {/* 一核：中心 WebSocket 流 */}
-          <div className="lg:col-span-5">
+          {/* 中枢：Live Stream */}
+          <div className="w-full">
             <LiveStream />
           </div>
 
           {/* 右翼：Smart Money Detective */}
-          <div className="lg:col-span-4">
+          <div className="w-full">
             <SmartMoney />
           </div>
-
         </div>
       </main>
     </div>

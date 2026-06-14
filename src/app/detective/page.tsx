@@ -122,7 +122,7 @@ export default function DetectiveListPage() {
                       <div className="font-mono text-lg font-bold text-gray-900 mb-1">{formatAddress(trader.address)}</div>
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
                         <span>Win Rate: <span className="font-semibold text-gray-900">{trader.win_rate.toFixed(1)}%</span></span>
-                        <span>Volume (30D): <span className="font-semibold text-gray-900">${(trader.total_volume_30d / 1000000).toFixed(1)}M</span></span>
+                        <span>Volume (30D): <span className="font-semibold text-gray-900">${(trader.total_volume_30d).toFixed(1)}</span></span>
                       </div>
                     </div>
 

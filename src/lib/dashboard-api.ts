@@ -3,15 +3,24 @@ import axios from "axios";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export interface KpiData {
-  volume_24h_usd: number;
-  active_smart_money_count: number;
-  alerts_today: number;
+  smart_swaps_count: number;
+  smart_swaps_sum: number;
+  zero_day_count: number;
+  whale_moves_count: number;
+  whale_moves_sum: number;
+  liquidity_count: number;
+  liquidity_sum: number;
+  bridges_count: number;
+  bridges_sum: number;
 }
 
 export interface TokenRadarItem {
   symbol: string;
+  name: string;              
   volume_1h_usd: number;
+  volume_change_pct: number;  
   mev_toxicity_pct: number;
+  ai_score: number;          
   ai_insight: string;
 }
 
@@ -21,6 +30,7 @@ export interface SmartMoneyItem {
   pnl_ratio: number;
   tags: string[];
   ai_profiling: string;
+  score: number;
 }
 
 export interface AlertMessage {

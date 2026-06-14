@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { AlertMessage, truncateAddress, formatCurrency } from "@/lib/dashboard-api";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RadioTower } from "lucide-react";
 
@@ -27,28 +27,18 @@ export function LiveStream() {
 
   useEffect(() => {
     let reconnectTimeout: NodeJS.Timeout;
-
     const connect = () => {
       const ws = new WebSocket(`${WS_URL}/dashboard/stream`);
       wsRef.current = ws;
-
       ws.onmessage = (event) => {
         try {
           const newAlert: AlertMessage = JSON.parse(event.data);
-          setAlerts((prev) => [newAlert, ...prev].slice(0, 50)); // 保留最新 50 条
-        } catch (err) {
-          console.error("Failed to parse websocket message", err);
-        }
+          setAlerts((prev) => [newAlert, ...prev].slice(0, 50));
+        } catch (err) {}
       };
-
-      ws.onclose = () => {
-        // 断线自动重连机制
-        reconnectTimeout = setTimeout(connect, 3000);
-      };
+      ws.onclose = () => { reconnectTimeout = setTimeout(connect, 3000); };
     };
-
     connect();
-
     return () => {
       clearTimeout(reconnectTimeout);
       if (wsRef.current) wsRef.current.close();
@@ -56,17 +46,19 @@ export function LiveStream() {
   }, []);
 
   return (
-    <Card className="h-[600px] flex flex-col shadow-none border-slate-200 overflow-hidden">
-      <CardHeader className="border-b border-slate-100 bg-slate-50/50 py-4">
+    <Card className="h-[750px] flex flex-col shadow-sm border-slate-200 bg-white rounded-2xl overflow-hidden">
+      {/* 统一规范的标题栏 */}
+      <CardHeader className="pb-4 pt-5 px-5 border-b border-slate-100 shrink-0 bg-white">
         <div className="flex items-center space-x-2">
           <RadioTower className="h-5 w-5 text-indigo-600 animate-pulse" />
-          <CardTitle className="text-base font-semibold text-slate-800">Global Live Stream</CardTitle>
+          <h2 className="text-lg font-bold text-slate-900 tracking-tight">Global Live Stream</h2>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-y-auto p-0 bg-slate-50/30">
+      
+      <CardContent className="flex-1 overflow-y-auto p-0 bg-slate-50/30 scrollbar-hide">
         <div className="divide-y divide-slate-100">
           {alerts.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-400">Waiting for real-time on-chain signals...</div>
+            <div className="p-8 text-center text-sm text-slate-400 mt-10">Waiting for real-time on-chain signals...</div>
           ) : (
             alerts.map((alert) => (
               <div key={alert.event_id} className="p-4 hover:bg-white transition-colors animate-in fade-in slide-in-from-top-2">
