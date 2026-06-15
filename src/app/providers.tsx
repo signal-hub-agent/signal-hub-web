@@ -3,7 +3,7 @@
 import * as React from "react";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { mantle, mainnet } from "wagmi/chains";
+import { mantleSepoliaTestnet, mantle, mainnet } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 // 🌟 1. 引入 SessionProvider
 import { SessionProvider } from "next-auth/react"; 
@@ -13,7 +13,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 const config = getDefaultConfig({
   appName: "Signal Hub",
   projectId: "7808052059e8aafdffae2219a83c5804",
-  chains: [mantle, mainnet],
+  chains: [mantleSepoliaTestnet, mantle, mainnet],
   ssr: true,
 });
 

@@ -9,10 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Bell, Search, Trash2, Edit } from "lucide-react";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { SubscriptionItem } from "@/types/alerts";
+// 🌟 引入刚刚写好的 Telegram 绑定卡片
+import { TelegramBindCard } from "@/components/ui/TelegramBindCard";
 
 export default function AlertsPage() {
- const { data: session } = useSession();
- const userEmail = session?.user?.email;
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
   const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -76,9 +78,33 @@ export default function AlertsPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
-      <div className="flex items-center space-x-3">
-        <Bell className="text-indigo-600 w-8 h-8" />
-        <h1 className="text-3xl font-bold">Alert Rules Engine</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center space-x-3">
+          <Bell className="text-indigo-600 w-8 h-8" />
+          <h1 className="text-3xl font-bold">Alert Rules Engine</h1>
+        </div>
+        
+        {/* 🌟 链上数据验证快捷区 */}
+        <div className="flex items-center space-x-3 bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100">
+          <div className="flex flex-col text-sm">
+            <span className="text-indigo-900 font-semibold">On-Chain Integrity Verification</span>
+            <span className="text-indigo-500 text-xs font-mono">Data anchored to Mantle Testnet</span>
+          </div>
+          <div className="h-8 w-px bg-indigo-200 mx-2"></div>
+          {/* 替换为你的真实合约地址 */}
+          <Button 
+            size="sm" 
+            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            onClick={() => window.open(`https://explorer.sepolia.mantle.xyz/address/0x这里填你的真实合约地址?tab=logs`, '_blank')}
+          >
+            View Contract Logs ↗
+          </Button>
+        </div>
+      </div>
+
+      {/* 🌟 渲染 Telegram 绑定卡片 */}
+      <div>
+        <TelegramBindCard />
       </div>
 
       <Card className="p-6">
@@ -119,6 +145,13 @@ export default function AlertsPage() {
                   </Button>
                   <Button variant="outline" size="sm" className="text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(sub.target_id)}>
                     <Trash2 className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                    onClick={() => window.open(`https://explorer.sepolia.mantle.xyz/address/0x34521314C8846e61e64e1CA907dEB58357008af3?tab=logs`, '_blank')}>
+                    <Bell className="w-4 h-4 mr-2" /> Verify Data on Explorer
                   </Button>
                 </div>
               </div>

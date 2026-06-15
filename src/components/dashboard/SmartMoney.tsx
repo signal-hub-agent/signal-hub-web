@@ -19,7 +19,7 @@ export function SmartMoney() {
       <CardHeader className="pb-4 pt-5 px-5 border-b border-slate-100 shrink-0 bg-white">
         <div className="flex items-center space-x-2">
           <ShieldCheck className="h-5 w-5 text-indigo-600" />
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">AI Detective</h2>
+          <h2 className="text-lg font-bold text-slate-900 tracking-tight">AI Address Detective</h2>
         </div>
       </CardHeader>
       
